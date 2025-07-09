@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forecast Logs</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f4f4f4; }
+        h1 { color: #2c3e50; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #fff; }
+        th, td { padding: 10px; border-bottom: 1px solid #ddd; }
+        th { background: #3498db; color: #fff; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        .result-cell { max-width: 400px; word-break: break-all; font-size: 12px; }
+        .user-cell { font-weight: bold; color: #2c3e50; }
+        .filter-bar { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>📜 Forecast Logs</h1>
+    <div class="filter-bar">
+        <form method="get" action="/logs" style="display:inline;">
+            <input type="text" name="user" placeholder="Filter by user" value="{{ filter_user or '' }}">
+            <button type="submit">Filter</button>
+            {% if filter_user %}<a href="/logs">Clear Filter</a>{% endif %}
+        </form>
+        <a href="/download{% if filter_user %}?user={{ filter_user }}{% endif %}" style="margin-left:20px;">Download This View (CSV)</a>
+        <a href="/" style="margin-left:20px;">← Back to Forecast</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Timestamp</th>
+                <th>Asset</th>
+                <th>Days</th>
+                <th>Forecast Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr>
+                <td class="user-cell">{{ log.user }}</td>
+                <td>{{ log.timestamp }}</td>
+                <td>{{ log.asset }}</td>
+                <td>{{ log.forecast_days }}</td>
+                <td class="result-cell">
+                    {% for row in log.forecast_result %}
+                        {{ row.date }}: {{ row.price }}<br>
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

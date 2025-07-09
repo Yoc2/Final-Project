@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forecast Dataset</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px;
+            background-color: #121212;
+            color: #f5f5f5;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+
+        .preview, form {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.05);
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+
+        h2, h3 {
+            color: #ffffff;
+            margin-top: 0;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+            color: #ccc;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 4px;
+            border: 1px solid #444;
+            background-color: #2a2a2a;
+            color: #f5f5f5;
+        }
+
+        button {
+            background-color: #ffffff;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #e0e0e0;
+        }
+
+        #forecast-result {
+            margin-top: 40px;
+        }
+
+        img {
+            margin-top: 20px;
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        table {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #1e1e1e;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.05);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background-color: #333;
+            color: #f5f5f5;
+            text-align: left;
+        }
+
+        td {
+            color: #ccc;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔎 Forecast Dataset: {{ dataset.name }}</h1>
+
+    <div class="preview">
+        <h2>Preview</h2>
+        {{ preview|safe }}
+    </div>
+
+    <form id="forecastForm" method="post" action="{{ url_for('forecast') }}">
+        <input type="hidden" id="dataset_id" name="dataset_id" value="{{ dataset.id }}">
+
+        <label for="user">User:</label>
+        <input type="text" id="user" name="user" placeholder="Your name">
+
+        <label for="column">Select Column to Forecast:</label>
+        <select name="column" id="column">
+            {% for col in columns %}
+                <option value="{{ col }}">{{ col }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="forecast_days">Days to Forecast:</label>
+        <input type="number" id="forecast_days" name="forecast_days" value="7">
+
+        <button type="submit">Generate Forecast</button>
+    </form>
+
+    <div id="forecast-result">
+        {% if forecast %}
+            <h2>Forecast Results</h2>
+            {% for asset, points in forecast.items() %}
+                <h3>{{ asset }}</h3>
+                <table>
+                    <tr><th>Date</th><th>Forecasted Value</th></tr>
+                    {% for row in points %}
+                        <tr><td>{{ row.date }}</td><td>{{ row.value }}</td></tr>
+                    {% endfor %}
+                </table>
+            {% endfor %}
+            <img src="data:image/png;base64,{{ plot_image }}" alt="Forecast Plot">
+        {% endif %}
+    </div>
+
+    <a href="{{ url_for('index') }}">← Back to Datasets</a>
+</body>
+</html>

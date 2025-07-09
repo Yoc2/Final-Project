@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Data Upload & Selection</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px;
+            background-color: #121212;
+            color: #f5f5f5;
+        }
+
+        h1, h2 {
+            color: #ffffff;
+        }
+
+        form, .datasets {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.05);
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+            color: #ccc;
+        }
+
+        input[type="file"],
+        input[type="text"],
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 4px;
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            color: #f5f5f5;
+        }
+
+        button {
+            background-color: #ffffff;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #e0e0e0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            background-color: #333;
+            color: #f5f5f5;
+            text-align: left;
+        }
+
+        .action-btn {
+            background-color: #fff;
+            color: #000;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background-color: #ccc;
+        }
+
+        a {
+            color: #ccc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>📤 Upload or Select Stock Data</h1>
+    <form method="post" enctype="multipart/form-data">
+        <label for="name">Dataset Name:</label>
+        <input type="text" name="name" id="name" placeholder="e.g. My Portfolio (optional)">
+        <label for="file">Upload CSV File:</label>
+        <input type="file" name="file" id="file" accept=".csv" required>
+        <button type="submit">Upload Dataset</button>
+    </form>
+
+    <div class="datasets">
+        <h2>📚 Available Datasets</h2>
+        <table>
+            <thead>
+                <tr><th>Name</th><th>Uploaded At</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+                {% for ds in datasets %}
+                <tr>
+                    <td>{{ ds[1] }}</td>
+                    <td>{{ ds[3] }}</td>
+                    <td><a class="action-btn" href="/select/{{ ds[0] }}">Select</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="/history">View Forecast History</a>
+</body>
+</html>
+s
