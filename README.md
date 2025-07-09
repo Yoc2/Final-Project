@@ -33,5 +33,5 @@ A Flask-based web application that allows users to upload datasets (CSV), select
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/forecast-app.git
+git clone https://github.com/Yoc2/Final-Project.git
 cd forecast-app
